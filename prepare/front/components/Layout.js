@@ -1,17 +1,22 @@
+import React from "react";
 import PropTypes from 'prop-types';
 import Link from 'next/link'
 import {Col, Input, Menu, Row} from 'antd'
 import LoginForm from "./LoginForm";
 import UserProfile from "./UserProfile";
-import {useState} from "react";
 import Styled from "styled-components";
+import {useSelector} from 'react-redux'
 
 const SearchInput = Styled(Input.Search)`
     vertical-align: middle
 `
 
 const Layout = ({children}) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    //const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    // 위와 동일
+    //const { isLoggedIn } = useSelector((state) => state.user);
 
     return (
         <div>
@@ -31,7 +36,7 @@ const Layout = ({children}) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12}>
                     {children}

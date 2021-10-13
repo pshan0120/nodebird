@@ -1,9 +1,10 @@
+import React, { useCallback } from "react";
 import Link from "next/link";
 import { Button, Form, Input } from "antd";
-import { useCallback, useMemo, useState } from "react";
 import Styled from "styled-components";
-import PropTypes from "prop-types";
 import useInput from "../hooks/useInput";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../reducers/user";
 
 const ButtonWrapper = Styled.div`
     margin-top: 10px
@@ -13,9 +14,10 @@ const FormWrapper = Styled(Form)`
     padding: 10px
 `;
 
-const LoginForm = ({ setIsLoggedIn }) => {
-    const [id, onChangeId] = useInput('');
-    const [password, onChangePassword] = useInput('');
+const LoginForm = () => {
+    const dispatch = useDispatch();
+    const [id, onChangeId] = useInput("");
+    const [password, onChangePassword] = useInput("");
 
     //const [id, setId] = useState("");
     //const [password, setPassword] = useState("");
@@ -27,12 +29,13 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
     // useMemo는 값을 캐싱
     // 리렌더링을 하지 않으려면 아래처럼 useMemo를 쓰거나 styled component를 써야 함
-    const buttonWrapperStyle = useMemo(() => ({ marginTop: 10 }), []);
+    //const buttonWrapperStyle = useMemo(() => ({ marginTop: 10 }), []);
 
     // onFinish : e.prevent.event가 이미 적용되어 있는 antd 의 속성
     const onSubmitForm = useCallback(() => {
         console.log("logged in");
-        setIsLoggedIn(true);
+        //setIsLoggedIn(true);
+        dispatch(loginAction({ id, password }));
     }, []);
 
     return (
@@ -44,7 +47,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
                     name="user-id"
                     value={id}
                     onChange={onChangeId}
-                    requierd
+                    requierd="true"
                 />
             </div>
             <div>
@@ -55,7 +58,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
                     type="password"
                     value={password}
                     onChange={onChangePassword}
-                    requierd
+                    requierd="true"
                 />
             </div>
             {/*<ButtonWrapper style={buttonWrapperStyle}>*/}
@@ -72,9 +75,5 @@ const LoginForm = ({ setIsLoggedIn }) => {
         </FormWrapper>
     );
 };
-
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired,
-}
 
 export default LoginForm;
