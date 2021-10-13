@@ -1,15 +1,10 @@
 import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import {
-    EllipsisOutlined,
-    HeartOutlined,
-    HeartTwoTone,
-    MessageOutlined,
-    RetweetOutlined,
-} from "@ant-design/icons";
-import { Avatar, Button, Card, Popover } from "antd";
+import { EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, Comment, List, Popover } from "antd";
 import { useSelector } from "react-redux";
 import PostImages from "./PostImages";
+import CommentForm from "./CommentForm";
 
 const PostCard = ({ post }) => {
     const [liked, setLiked] = useState(false);
@@ -57,7 +52,7 @@ const PostCard = ({ post }) => {
                         }
                     >
                         <EllipsisOutlined />
-                    </Popover>,
+                    </Popover>
                 ]}
             >
                 <Card.Meta
@@ -70,7 +65,24 @@ const PostCard = ({ post }) => {
                 <Buttons></Buttons>*/}
             </Card>
             {commentFormOpened && (
-                <div>댓글 부분</div>
+                <div>
+                    <CommentForm post={post}/>
+                    <List
+                        header={`${post.Comments.length}개의 댓글`}
+                        itemLayout="horizontal"
+                        dataSource={post.Comments}
+                        renderItem={(item) => (
+                            <li>
+                                <Comment
+                                    author={item.User.nickname}
+                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    content={item.content}
+                                />
+                            </li>
+                        )}
+
+                    />
+                </div>
             )}
             {/*<CommentForm></CommentForm>
             <Comments></Comments>*/}
@@ -85,8 +97,8 @@ PostCard.propTypes = {
         content: PropTypes.string,
         createdAt: PropTypes.object,
         Comments: PropTypes.arrayOf(PropTypes.object),
-        Images: PropTypes.arrayOf(PropTypes.object),
-    }).isRequired,
+        Images: PropTypes.arrayOf(PropTypes.object)
+    }).isRequired
 };
 
 export default PostCard;
